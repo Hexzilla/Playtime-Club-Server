@@ -1,4 +1,4 @@
-import { sign } from 'tweetnacl';
+//import { sign } from 'tweetnacl';
 import { uuid } from 'uuidv4';
 import { Player } from "./types";
 import * as roomService from "./room";
@@ -92,12 +92,17 @@ const server = (socket: any) => {
       socketId: socket.id,
     } as Player;
 
-    const room = roomService.createRoom();
+    const room = roomService.getRoom();
     room.players.push(player);
 
+    const payload = {
+      playerId: player.id,
+      roomId: room.id,
+      startTime: room.startTime,
+    }
     socket.emit(
       "JOIN_SUCCESS",
-      player.id,
+      JSON.stringify(payload),
     );
   });
 

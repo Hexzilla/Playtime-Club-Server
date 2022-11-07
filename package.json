@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "nodemon ./src/app.ts",
     "start": "env NODE_PATH=dist node dist/app.js",
+    "build": "tsc",
     "postinstall": "tsc",
     "heroku": "env NODE_PATH=dist node dist/app.js",
     "tslint": "tslint --project tsconfig.json",
@@ -19,6 +20,7 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
+    "moment": "^2.29.4",
     "socket.io": "4.5.2",
     "tweetnacl": "^1.0.3",
     "uuidv4": "^6.2.13"

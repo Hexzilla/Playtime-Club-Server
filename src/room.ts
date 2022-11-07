@@ -1,17 +1,28 @@
+import moment from "moment";
 import { Player } from "./types";
 
 const roomList: any[] = [];
 
 let uniqueId = 1;
 
+let currentRoom: any = null;
+
 export const createRoom = () => {
   const room = {
     id: uniqueId++,
     players: new Array<Player>(),
     createdAt: new Date(),
+    startTime: moment().add(15, 'm'),
   };
   roomList.push(room);
   return room;
+}
+
+export const getRoom = () => {
+  if (!currentRoom) {
+    currentRoom = createRoom();
+  }
+  return currentRoom;
 }
 
 export const closeRoom = (id) => {
