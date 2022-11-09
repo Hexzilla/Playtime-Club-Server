@@ -1,4 +1,5 @@
 //import { sign } from 'tweetnacl';
+import { char2Bytes, verifySignature } from "@taquito/utils";
 import { uuid } from 'uuidv4';
 import { Player } from "./types";
 import * as roomService from "./room";
@@ -86,9 +87,19 @@ const server = (socket: any) => {
   socket.on("JOIN", function (msg) {
     console.log("[INFO] JOIN received !!! ", msg);
 
+    const { network, publicKey, address, message, signature } = JSON.parse(msg);
+    if (network == 'tez') {
+      /*const verified = verifySignature(message, publicKey, signature);
+      console.log('verified', verified)
+      if (!verified) {
+        console.log('[INFO] Not Verified!!!');
+        return;
+      }*/
+    }
+
     player = {
-      id: uuid(),
-      address: msg.address,
+      id: address,
+      address: address,
       socketId: socket.id,
     } as Player;
 
@@ -249,7 +260,7 @@ const server = (socket: any) => {
   /// Called when the user desconnect
   socket.on("disconnect", function () {
     console.log("disconnect, player=", player);
-    if (player) {
+    if (player && player.id) {
       player.isDead = true;
 
       const room = roomService.getRoom();
