@@ -12,7 +12,7 @@ const server = (socket: any) => {
   console.log("A user ready for connection!");
 
   /// To store current client connection
-  const player: Player = {} as Player;
+  let player: Player = {} as Player;
 
   socket.on("PING", function () {
     console.log(`Ping Message from user #${socket.id}`);
@@ -86,7 +86,7 @@ const server = (socket: any) => {
   socket.on("JOIN", function (msg) {
     console.log("[INFO] JOIN received !!! ", msg);
 
-    const player = {
+    player = {
       id: uuid(),
       address: msg.address,
       socketId: socket.id,
@@ -94,6 +94,8 @@ const server = (socket: any) => {
 
     const room = roomService.getRoom();
     room.players.push(player);
+
+    clients.push(player);
 
     const payload = {
       playerId: player.id,
@@ -246,17 +248,24 @@ const server = (socket: any) => {
 
   /// Called when the user desconnect
   socket.on("disconnect", function () {
-    console.log("disconnect");
+    console.log("disconnect, player=", player);
     if (player) {
       player.isDead = true;
+
+      const room = roomService.getRoom();
+      if (room) {
+        const index = room.players.findIndex(i => i.id === player.id);
+        console.log('index', index)
+        room.players.splice(index, 1);
+      }
 
       /// Send to the client.js script
       /// Updates the currentUser disconnection for all players in game
       socket.broadcast.emit("USER_DISCONNECTED", player.id);
 
       for (var i = 0; i < clients.length; i++) {
-        if (clients[i].name == player.name && clients[i].id == player.id) {
-          console.log(`User ${clients[i].name} has disconnected`);
+        if (clients[i].id == player.id) {
+          console.log(`User ${clients[i].id} has disconnected`);
           clients.splice(i, 1);
         }
       }

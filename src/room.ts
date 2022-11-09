@@ -8,11 +8,17 @@ let uniqueId = 1;
 let currentRoom: any = null;
 
 export const createRoom = () => {
+  let startDate = moment();
+  if (moment().hour() >= 14) {
+    startDate = moment().add(1, 'd');
+  }
+  const startTime = moment(startDate.format('YYYY-MM-DD') + ' 14:00:00');
+  console.log('startTime', startTime)
   const room = {
     id: uniqueId++,
     players: new Array<Player>(),
     createdAt: new Date(),
-    startTime: moment().add(15, 'm'),
+    startTime,
   };
   roomList.push(room);
   return room;
