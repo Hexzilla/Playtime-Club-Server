@@ -107,6 +107,7 @@ const server = (socket: any) => {
     room.players.push(player);
 
     clients.push(player);
+    sockets[player.socketId] = socket; /// add curent user socket
 
     const payload = {
       playerId: player.id,
@@ -285,7 +286,7 @@ const server = (socket: any) => {
 };
 
 setInterval(() => {
-  roomService.update();  
+  roomService.update(sockets);  
 }, 1000);
 
 export default server;
