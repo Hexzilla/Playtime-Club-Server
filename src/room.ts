@@ -26,7 +26,7 @@ export const createRoom = () => {
 }
 
 export const getRoom = () => {
-  if (!currentRoom) {
+  if (!currentRoom || currentRoom.state !== 0) {
     currentRoom = createRoom();
   }
   return currentRoom;
