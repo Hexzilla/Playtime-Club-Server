@@ -19,7 +19,7 @@ export const createRoom = () => {
     players: new Array<Player>(),
     state: 0,
     createdAt: new Date(),
-    startTime,
+    startTime: moment().add(1, 'm'),
   };
   roomList.push(room);
   return room;
@@ -65,12 +65,13 @@ export const update = (sockets) => {
   if (room && room.state === 0) {
     const time = moment().diff(room.startTime, 's');
     if (time >= 0) {
+      room.state = 'started';
       room.players.map(player => {
         const socket = sockets[player.socketId];
         if (socket) {
           socket.emit("START_GAME", room.id);
         }
-      })      
+      })
     }
   }
 }
