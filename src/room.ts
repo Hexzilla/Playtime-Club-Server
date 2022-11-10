@@ -17,6 +17,7 @@ export const createRoom = () => {
   const room = {
     id: uniqueId++,
     players: new Array<Player>(),
+    state: 0,
     createdAt: new Date(),
     startTime,
   };
@@ -55,6 +56,21 @@ export const exitRoom = (roomId, playerId) => {
     const index = room.players.findIndex(i => i.id === playerId);
     if (index >= 0) {
       room.players.splice(index, 1)
+    }
+  }
+}
+
+export const update = (sockets) => {
+  const room = currentRoom;
+  if (room && room.state === 0) {
+    const time = moment().diff(room.startTime, 's');
+    if (time >= 0) {
+      room.players.map(player => {
+        const socket = sockets[player.socketId];
+        if (socket) {
+          socket.emit("START_GAME", room.id);
+        }
+      })      
     }
   }
 }

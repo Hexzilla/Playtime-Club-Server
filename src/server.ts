@@ -284,4 +284,8 @@ const server = (socket: any) => {
   });
 };
 
+setInterval(() => {
+  roomService.update();  
+}, 1000);
+
 export default server;
