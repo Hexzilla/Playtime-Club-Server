@@ -12,14 +12,14 @@ export const createRoom = () => {
   if (moment().hour() >= 14) {
     startDate = moment().add(1, 'd');
   }
-  const startTime = moment(startDate.format('YYYY-MM-DD') + ' 14:00:00');
+  const startTime = moment(startDate.format('YYYY-MM-DD') + ' 15:00:00');
   console.log('startTime', startTime)
   const room = {
     id: uniqueId++,
     players: new Array<Player>(),
     state: 0,
     createdAt: new Date(),
-    startTime: moment().add(1, 'm'),
+    startTime: startTime, //moment().add(1, 'm'),
   };
   roomList.push(room);
   return room;

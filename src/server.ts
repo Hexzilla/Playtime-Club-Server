@@ -22,6 +22,15 @@ const server = (socket: any) => {
     socket.emit("PONG", socket.id);
   });
 
+  socket.on("GET_ROOM", function () {
+    console.log("[INFO] GET_ROOM received !!! ");
+    const room = roomService.getRoom();
+    socket.emit(
+      "ROOM_INFO",
+      JSON.stringify(room),
+    );
+  });
+
   socket.on("LOGIN", function (msg) {
     console.log("[INFO] LOGIN received !!! ", msg);
 
